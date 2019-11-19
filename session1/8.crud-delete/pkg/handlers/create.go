@@ -51,6 +51,9 @@ type HandlerGetAll struct {
 type HandlerPut struct {
 }
 
+type HandlerDelete struct {
+}
+
 func (HandlerPost) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -114,9 +117,9 @@ func (HandlerGet) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	person, ok := PersonMap[bid]
 	if !ok {
-		log.Info("no records for given book id")
+		log.Info("no records for given  id")
 		w.WriteHeader(http.StatusOK)
-		_, _ = fmt.Fprint(w, "no records for given book id")
+		_, _ = fmt.Fprint(w, "no records for given  id")
 		return
 	}
 
@@ -202,5 +205,49 @@ func (HandlerPut) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	PersonMap[bid] = p
 	w.WriteHeader(http.StatusOK)
 	_, _ = fmt.Fprintf(w, "success updating info for id: %v", bid)
+
+}
+
+func (HandlerDelete) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	var err error
+	var bid int
+
+	params := mux.Vars(r)
+	if !(len(params) > 0) {
+		err = errors.New("id missing in request")
+		log.Error(err)
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = fmt.Fprint(w, err)
+		return
+	}
+
+	bidStr, ok := params["id"]
+	if !ok {
+		err = errors.New("id missing in request")
+		log.Error(err)
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = fmt.Fprint(w, err)
+		return
+	}
+
+	bid, err = strconv.Atoi(bidStr)
+	if err != nil {
+		log.Error(err)
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = fmt.Fprint(w, err)
+		return
+	}
+
+	_, ok = PersonMap[bid]
+	if !ok {
+		log.Info("nothing to delete")
+		w.WriteHeader(http.StatusOK)
+		_, _ = fmt.Fprint(w, "nothing to delete")
+		return
+	}
+
+	delete(PersonMap, bid)
+	w.WriteHeader(http.StatusOK)
+	_, _ = fmt.Fprintf(w, "success deleting info for id: %v", bid)
 
 }

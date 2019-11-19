@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/wgarunap/devfest/session1/7.crud-put/pkg/handlers"
+	"github.com/wgarunap/devfest/session1/8.crud-delete/pkg/handlers"
 	"net/http"
 	"time"
 )
@@ -38,6 +38,11 @@ func main() {
 	router.Handle("/person/{id}", handlers.HandlerPut{}).
 		Methods(http.MethodPut).
 		Name("update-person-info").
+		Headers("content-type", "application/json")
+
+	router.Handle("/person/{id}", handlers.HandlerDelete{}).
+		Methods(http.MethodDelete).
+		Name("delete-person-info").
 		Headers("content-type", "application/json")
 
 	err := server.ListenAndServe()
