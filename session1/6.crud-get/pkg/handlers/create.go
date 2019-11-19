@@ -1,40 +1,14 @@
-package main
+package handlers
 
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
 	"github.com/pickme-go/log"
 	"io/ioutil"
 	"net/http"
-	"time"
 )
 
 var person map[int]Person
-
-func main() {
-
-	person = make(map[int]Person, 0)
-
-	router := mux.NewRouter()
-
-	server := http.Server{
-		Addr:         ":8001",
-		Handler:      router,
-		ReadTimeout:  1 * time.Second,
-		WriteTimeout: 1 * time.Second,
-	}
-
-	router.Handle("/person", handler{}).
-		Methods(http.MethodPost).
-		Name("add-post").
-		Headers("content-type", "application/json")
-
-	err := server.ListenAndServe()
-	if err != nil {
-		panic(err)
-	}
-}
 
 type Person struct {
 	ID          int    `json:"id,omitempty"`
@@ -52,10 +26,10 @@ type Response struct {
 	ID int `json:"id,omitempty"`
 }
 
-type handler struct {
+type Handler struct {
 }
 
-func (handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Error(err)

@@ -22,7 +22,12 @@ func main() {
 
 	router.Handle("/person", handlers.HandlerPost{}).
 		Methods(http.MethodPost).
-		Name("add-post").
+		Name("create-person-info").
+		Headers("content-type", "application/json")
+
+	router.Handle("/person/{id}", handlers.HandlerGet{}).
+		Methods(http.MethodGet).
+		Name("get-person-info").
 		Headers("content-type", "application/json")
 
 	err := server.ListenAndServe()
