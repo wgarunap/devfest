@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-var person map[int]Person
+var PersonMap map[int]Person
 
 type Person struct {
 	ID          int    `json:"id,omitempty"`
@@ -67,9 +67,9 @@ func (HandlerPost) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	p.ID = len(person) + 1
+	p.ID = len(PersonMap) + 1
 
-	person[p.ID] = p
+	PersonMap[p.ID] = p
 
 	w.WriteHeader(http.StatusOK)
 
@@ -109,7 +109,7 @@ func (HandlerGet) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	person, ok := person[bid]
+	PersonMap, ok := PersonMap[bid]
 	if !ok {
 		log.Info("no records for given book id")
 		w.WriteHeader(http.StatusOK)
@@ -118,12 +118,12 @@ func (HandlerGet) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	res := GetResponse{}
-	res.Phone = person.Phone
-	res.City = person.City
-	res.Firstname = person.Firstname
-	res.Lastname = person.Lastname
-	res.Zipcode = person.Zipcode
-	res.Contactinfo = person.Contactinfo
+	res.Phone = PersonMap.Phone
+	res.City = PersonMap.City
+	res.Firstname = PersonMap.Firstname
+	res.Lastname = PersonMap.Lastname
+	res.Zipcode = PersonMap.Zipcode
+	res.Contactinfo = PersonMap.Contactinfo
 	w.WriteHeader(http.StatusOK)
 	b, _ := json.Marshal(res)
 	_, _ = w.Write(b)
@@ -133,7 +133,7 @@ func (HandlerGet) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (HandlerGetAll) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	res := GetAllResponse{}
-	res.Data = person
+	res.Data = PersonMap
 	w.WriteHeader(http.StatusOK)
 	b, _ := json.Marshal(res)
 	_, _ = w.Write(b)

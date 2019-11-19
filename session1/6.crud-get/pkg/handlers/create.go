@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-var person map[int]Person
+var PersonMap map[int]Person
 
 type Person struct {
 	ID          int    `json:"id,omitempty"`
@@ -48,9 +48,9 @@ func (Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	p.ID = len(person) + 1
+	p.ID = len(PersonMap) + 1
 
-	person[p.ID] = p
+	PersonMap[p.ID] = p
 
 	w.WriteHeader(http.StatusOK)
 

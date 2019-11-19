@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	//person = make(map[int]Person, 0)
+	handlers.PersonMap = make(map[int]handlers.Person, 0)
 
 	router := mux.NewRouter()
 
@@ -30,7 +30,7 @@ func main() {
 		Name("get-person-info").
 		Headers("content-type", "application/json")
 
-	router.Handle("/person", handlers.HandlerGet{}).
+	router.Handle("/person", handlers.HandlerGetAll{}).
 		Methods(http.MethodGet).
 		Name("get-person-info").
 		Headers("content-type", "application/json")

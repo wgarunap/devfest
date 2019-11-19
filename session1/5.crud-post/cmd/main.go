@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	//person = make(map[int]Person, 0)
+	handlers.PersonMap = make(map[int]handlers.Person, 0)
 
 	router := mux.NewRouter()
 

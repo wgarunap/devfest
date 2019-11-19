@@ -1,0 +1,116 @@
+GET http://localhost:8001/person/2
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{     "firstname": "wishwa",     "lastname": "perera" }
+
+<> 2019-11-19T111945.200.txt
+
+###
+
+GET http://localhost:8001/person/1
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{     "firstname": "wishwa",     "lastname": "perera" }
+
+<> 2019-11-19T111935.200.txt
+
+###
+
+GET http://localhost:8001/person
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{     "firstname": "wishwa",     "lastname": "perera" }
+
+<> 2019-11-19T111925.200.txt
+
+###
+
+POST http://localhost:8001/person
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{     "firstname": "wishwa",     "lastname": "perera" }
+
+<> 2019-11-19T111858.200.txt
+
+###
+
+POST http://localhost:8001/person
+Accept: */*
+Cache-Control: no-cache
+
+{     "firstname": "wishwa",     "lastname": "perera" }
+
+<> 2019-11-19T111843.404.txt
+
+###
+
+GET http://localhost:8001/person
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{     "firstname": "wishwa",     "lastname": "perera" }
+
+<> 2019-11-19T111809.200.txt
+
+###
+
+GET http://localhost:8001/person
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{     "firstname": "wishwa",     "lastname": "perera" }
+
+<> 2019-11-19T111734.400.txt
+
+###
+
+POST http://localhost:8001/person
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{     "firstname": "wishwa",     "lastname": "perera" }
+
+<> 2019-11-19T111709.200.txt
+
+###
+
+POST http://localhost:8001/person
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{     "firstname": "wishwa",     "lastname": "perera" }
+
+###
+
+POST http://localhost:8001/person
+Accept: */*
+Cache-Control: no-cache
+
+{     "firstname": "wishwa",     "lastname": "perera" }
+
+<> 2019-11-19T111339.404.txt
+
+###
+
+POST http://localhost:8001/person
+Accept: */*
+Cache-Control: no-cache
+
+{     "firstname": "wishwa",     "lastname": "perera" }
+
+<> 2019-11-19T111304.404.txt
+
+###
+
