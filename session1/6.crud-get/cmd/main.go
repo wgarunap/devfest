@@ -1,8 +1,8 @@
 package main
 
 import (
-	"githhub.com/wgarunap/devfest/session1/5.crud-post/pkg/handlers"
 	"github.com/gorilla/mux"
+	"github.com/wgarunap/devfest/session1/6.crud-get/pkg/handlers"
 	"net/http"
 	"time"
 )
