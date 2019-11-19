@@ -35,10 +35,17 @@ type GetResponse struct {
 	Contactinfo `json:"contactinfo,omitempty"`
 }
 
+type GetAllResponse struct {
+	Data map[int]Person `json:"data"`
+}
+
 type HandlerPost struct {
 }
 
 type HandlerGet struct {
+}
+
+type HandlerGetAll struct {
 }
 
 func (HandlerPost) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -117,6 +124,16 @@ func (HandlerGet) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	res.Lastname = person.Lastname
 	res.Zipcode = person.Zipcode
 	res.Contactinfo = person.Contactinfo
+	w.WriteHeader(http.StatusOK)
+	b, _ := json.Marshal(res)
+	_, _ = w.Write(b)
+
+}
+
+func (HandlerGetAll) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+	res := GetAllResponse{}
+	res.Data = person
 	w.WriteHeader(http.StatusOK)
 	b, _ := json.Marshal(res)
 	_, _ = w.Write(b)

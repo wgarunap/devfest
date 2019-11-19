@@ -30,6 +30,11 @@ func main() {
 		Name("get-person-info").
 		Headers("content-type", "application/json")
 
+	router.Handle("/person", handlers.HandlerGet{}).
+		Methods(http.MethodGet).
+		Name("get-person-info").
+		Headers("content-type", "application/json")
+
 	err := server.ListenAndServe()
 	if err != nil {
 		panic(err)
