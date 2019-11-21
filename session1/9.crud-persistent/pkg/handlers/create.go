@@ -10,9 +10,9 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/pickme-go/log"
-	"github.com/wgarunap/devfest/session1/8.crud-persistent/pkg/adapters"
-	"github.com/wgarunap/devfest/session1/8.crud-persistent/pkg/models"
-	"github.com/wgarunap/devfest/session1/8.crud-persistent/pkg/repositories"
+	"github.com/wgarunap/devfest/session1/9.crud-persistent/pkg/adapters"
+	"github.com/wgarunap/devfest/session1/9.crud-persistent/pkg/models"
+	"github.com/wgarunap/devfest/session1/9.crud-persistent/pkg/repositories"
 )
 
 var PersonMap map[int]models.Person

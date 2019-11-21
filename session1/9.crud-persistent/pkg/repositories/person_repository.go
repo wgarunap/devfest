@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"errors"
 
-	"github.com/wgarunap/devfest/session1/8.crud-persistent/pkg/models"
+	"github.com/wgarunap/devfest/session1/9.crud-persistent/pkg/models"
 )
 
 type personRepository struct {
