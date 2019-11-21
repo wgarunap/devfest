@@ -8,7 +8,7 @@ import (
 
 // NewDbConnection initialize and returns a new database connection
 func NewDbConnection() *sql.DB {
-	db, err := sql.Open("mysql", "root:123@/phonebook")
+	db, err := sql.Open("mysql", "devfest_go:goturns10@tcp(35.213.163.65:3306)/phonebook")
 
 	if err != nil {
 		panic(err)

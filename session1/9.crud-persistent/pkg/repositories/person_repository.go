@@ -18,6 +18,27 @@ func NewPersonRepository(db *sql.DB) *personRepository {
 	}
 }
 
+// AddPerson adds a new person to the database
+func (pr *personRepository) Add(person models.Person) (int, error) {
+
+	result, err := pr.db.Exec(`
+		INSERT INTO phonebook.person
+		(first_name, last_name, city, zipcode, phone)
+		VALUES(?, ?, ?, ?, ?)
+	`, person.Firstname, person.Lastname, person.City, person.Zipcode, person.Phone)
+
+	if err != nil {
+		return 0, err
+	}
+
+	id, err := result.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+
+	return int(id), nil
+}
+
 // GetAll returns all the person entries that we have in the database
 func (pr *personRepository) GetAll() ([]models.Person, error) {
 
@@ -47,7 +68,7 @@ func (pr *personRepository) GetAll() ([]models.Person, error) {
 }
 
 // GetPersonByID returns a single entry
-func (pr *personRepository) GetPersonByID(id int) (bool, models.Person, error) {
+func (pr *personRepository) GetByID(id int) (bool, models.Person, error) {
 
 	row := pr.db.QueryRow(`
 		SELECT id, first_name, last_name, city, zipcode, phone
@@ -71,7 +92,7 @@ func (pr *personRepository) GetPersonByID(id int) (bool, models.Person, error) {
 }
 
 // DeletePerson deletes a person from the database
-func (pr *personRepository) DeletePerson(id int) (bool, error) {
+func (pr *personRepository) Delete(id int) (bool, error) {
 
 	result, err := pr.db.Exec(`
 		DELETE FROM phonebook.person
@@ -94,29 +115,8 @@ func (pr *personRepository) DeletePerson(id int) (bool, error) {
 	return true, nil
 }
 
-// AddPerson adds a new person to the database
-func (pr *personRepository) AddPerson(person models.Person) (int, error) {
-
-	result, err := pr.db.Exec(`
-		INSERT INTO phonebook.person
-		(first_name, last_name, city, zipcode, phone)
-		VALUES(?, ?, ?, ?, ?)
-	`, person.Firstname, person.Lastname, person.City, person.Zipcode, person.Phone)
-
-	if err != nil {
-		return 0, err
-	}
-
-	id, err := result.LastInsertId()
-	if err != nil {
-		return 0, err
-	}
-
-	return int(id), nil
-}
-
 // UpdatePerson updates an existing record
-func (pr *personRepository) UpdatePerson(id int, person models.Person) (bool, error) {
+func (pr *personRepository) Update(id int, person models.Person) (bool, error) {
 
 	result, err := pr.db.Exec(`
 		UPDATE phonebook.person

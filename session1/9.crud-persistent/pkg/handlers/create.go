@@ -15,7 +15,7 @@ import (
 	"github.com/wgarunap/devfest/session1/9.crud-persistent/pkg/repositories"
 )
 
-var PersonMap map[int]models.Person
+// var PersonMap map[int]models.Person
 
 type PostResponse struct {
 	ID int `json:"id,omitempty"`
@@ -67,12 +67,7 @@ func (HandlerPost) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// p.ID = len(PersonMap) + 1
-
-	// PersonMap[p.ID] = p
-
-	fmt.Println(p)
-	id, err := personRepository.AddPerson(p)
+	id, err := personRepository.Add(p)
 
 	if err != nil {
 		log.Error(err)
@@ -119,7 +114,7 @@ func (HandlerGet) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	recordExist, person, err := personRepository.GetPersonByID(bid)
+	recordExist, person, err := personRepository.GetByID(bid)
 
 	if err != nil {
 		log.Error(err)
@@ -228,7 +223,7 @@ func (HandlerPut) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// PersonMap[bid] = p
 
-	success, err := personRepository.UpdatePerson(bid, p)
+	success, err := personRepository.Update(bid, p)
 	if err != nil {
 		log.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -277,7 +272,7 @@ func (HandlerDelete) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = personRepository.DeletePerson(bid)
+	_, err = personRepository.Delete(bid)
 	if err != nil {
 		log.Error(err)
 		w.WriteHeader(http.StatusInternalServerError)
