@@ -2,14 +2,15 @@ package main
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/wgarunap/devfest/session1/6.crud-get/pkg/handlers"
+	"github.com/wgarunap/devfest/session2/6.crud-post/pkg/handlers"
+	"github.com/wgarunap/devfest/session2/6.crud-post/pkg/models"
 	"net/http"
 	"time"
 )
 
 func main() {
 
-	handlers.PersonMap = make(map[int64]handlers.Person, 0)
+	handlers.PersonMap = make(map[int64]models.Person, 0)
 
 	router := mux.NewRouter()
 
