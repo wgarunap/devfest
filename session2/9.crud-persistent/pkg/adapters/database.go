@@ -14,5 +14,11 @@ func NewDbConnection() *sql.DB {
 		panic(err)
 	}
 
+	// Make sure that we have a proper connection with the server
+	err = db.Ping()
+	if  err != nil {
+		panic(err)
+	}
+
 	return db
 }
