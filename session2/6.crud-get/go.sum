@@ -8,4 +8,3 @@ github.com/pickme-go/log v1.2.3 h1:DVDGyhe6pKpVAYPfVN8G3W7TlhGzrG8r0obTJXLEOUU=
 github.com/pickme-go/log v1.2.3/go.mod h1:7k8BN/9rsPLQwDNRI2iQ8aLO/Lm0WAIa0p+TBWYVor8=
 github.com/pickme-go/traceable-context v1.0.0 h1:q9ZOf0MZIIzgwi2YKx5MOP++2vxlqZFck4XZxZubIwk=
 github.com/pickme-go/traceable-context v1.0.0/go.mod h1:di3UG7gaOYqVRF3Q67+6ThEfIQvbebinon0tj+Epiuk=
-github.com/wgarunap/devfest v0.0.0-20191119041822-33e65774ed99 h1:Kizo8C3U2DpoiP/bit3PhE+PAnIpr0zYHDws4cBEM5Y=
