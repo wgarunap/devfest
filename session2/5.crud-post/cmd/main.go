@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/wgarunap/devfest/session1/5.crud-post/pkg/handlers"
+	"github.com/wgarunap/devfest/session2/5.crud-post/pkg/handlers"
 	"net/http"
 	"time"
 )
