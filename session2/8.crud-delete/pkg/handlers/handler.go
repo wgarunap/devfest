@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/pickme-go/log"
+	"github.com/wgarunap/devfest/session2/8.crud-delete/pkg/models"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -13,32 +14,20 @@ import (
 )
 
 var counter int64
-var PersonMap map[int64]Person
-
-type Person struct {
-	ID          int64    `json:"id,omitempty"`
-	Firstname   string `json:"firstname,omitempty"`
-	Lastname    string `json:"lastname,omitempty"`
-	Contactinfo `json:"contactinfo,omitempty"`
-}
-type Contactinfo struct {
-	City    string `json:"city,omitempty"`
-	Zipcode string `json:"zipcode,omitempty"`
-	Phone   string `json:"phone,omitempty"`
-}
+var PersonMap map[int64]models.Person
 
 type PostResponse struct {
 	ID int64 `json:"id,omitempty"`
 }
 
 type GetResponse struct {
-	Firstname   string `json:"firstname,omitempty"`
-	Lastname    string `json:"lastname,omitempty"`
-	Contactinfo `json:"contactinfo,omitempty"`
+	Firstname          string `json:"firstname,omitempty"`
+	Lastname           string `json:"lastname,omitempty"`
+	models.ContactInfo `json:"contactinfo,omitempty"`
 }
 
 type GetAllResponse struct {
-	Data map[int64]Person `json:"data"`
+	Data map[int64]models.Person `json:"data"`
 }
 
 type HandlerPost struct {
@@ -53,7 +42,8 @@ type HandlerGetAll struct {
 type HandlerPut struct {
 }
 
-type HandlerDelete struct {
+type HandlerDelete struct{
+
 }
 
 func (HandlerPost) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -65,7 +55,7 @@ func (HandlerPost) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var p Person
+	var p models.Person
 
 	err = json.Unmarshal(data, &p)
 	if err != nil {
@@ -119,9 +109,9 @@ func (HandlerGet) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	person, ok := PersonMap[int64(bid)]
 	if !ok {
-		log.Info("no records for given  id")
+		log.Info("no records for given book id")
 		w.WriteHeader(http.StatusOK)
-		_, _ = fmt.Fprint(w, "no records for given  id")
+		_, _ = fmt.Fprint(w, "no records for given book id")
 		return
 	}
 
@@ -130,8 +120,10 @@ func (HandlerGet) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	res.City = person.City
 	res.Firstname = person.Firstname
 	res.Lastname = person.Lastname
-	res.Zipcode = person.Zipcode
-	res.Contactinfo = person.Contactinfo
+	res.AreaCode = person.AreaCode
+	res.ContactInfo = person.ContactInfo
+
+	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	b, _ := json.Marshal(res)
 	_, _ = w.Write(b)
@@ -142,6 +134,7 @@ func (HandlerGetAll) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	res := GetAllResponse{}
 	res.Data = PersonMap
+	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	b, _ := json.Marshal(res)
 	_, _ = w.Write(b)
@@ -186,7 +179,7 @@ func (HandlerPut) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var p Person
+	var p models.Person
 
 	err = json.Unmarshal(data, &p)
 	if err != nil {
@@ -209,6 +202,7 @@ func (HandlerPut) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	_, _ = fmt.Fprintf(w, "success updating info for id: %v", bid)
 
 }
+
 
 func (HandlerDelete) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var err error
