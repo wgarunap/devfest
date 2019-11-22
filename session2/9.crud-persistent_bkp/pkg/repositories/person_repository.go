@@ -2,8 +2,9 @@ package repositories
 
 import (
 	"database/sql"
+	"errors"
 
-	"github.com/wgarunap/devfest/session2/9.crud-persistent/pkg/models"
+	"github.com/wgarunap/devfest/session1/9.crud-persistent/pkg/models"
 )
 
 type personRepository struct {
@@ -22,9 +23,9 @@ func (pr *personRepository) Add(person models.Person) (int, error) {
 
 	result, err := pr.db.Exec(`
 		INSERT INTO phonebook.person
-		(first_name, last_name, city, areacode, phone)
+		(first_name, last_name, city, zipcode, phone)
 		VALUES(?, ?, ?, ?, ?)
-	`, person.Firstname, person.Lastname, person.City, person.AreaCode, person.Phone)
+	`, person.Firstname, person.Lastname, person.City, person.Zipcode, person.Phone)
 
 	if err != nil {
 		return 0, err
@@ -42,7 +43,7 @@ func (pr *personRepository) Add(person models.Person) (int, error) {
 func (pr *personRepository) GetAll() ([]models.Person, error) {
 
 	rows, err := pr.db.Query(`
-		SELECT id, first_name, last_name, city, areacode, phone
+		SELECT id, first_name, last_name, city, zipcode, phone
 		FROM phonebook.person
 	`)
 
@@ -54,7 +55,7 @@ func (pr *personRepository) GetAll() ([]models.Person, error) {
 
 	for rows.Next() {
 		person := models.Person{}
-		err = rows.Scan(&person.ID, &person.Firstname, &person.Lastname, &person.City, &person.AreaCode, &person.Phone)
+		err = rows.Scan(&person.ID, &person.Firstname, &person.Lastname, &person.City, &person.Zipcode, &person.Phone)
 		if err != nil {
 			return nil, err
 		}
@@ -70,13 +71,13 @@ func (pr *personRepository) GetAll() ([]models.Person, error) {
 func (pr *personRepository) GetByID(id int) (bool, models.Person, error) {
 
 	row := pr.db.QueryRow(`
-		SELECT id, first_name, last_name, city, areacode, phone
+		SELECT id, first_name, last_name, city, zipcode, phone
 		FROM phonebook.person WHERE id = ?
 	`, id)
 
 	person := models.Person{}
 
-	err := row.Scan(&person.ID, &person.Firstname, &person.Lastname, &person.City, &person.AreaCode, &person.Phone)
+	err := row.Scan(&person.ID, &person.Firstname, &person.Lastname, &person.City, &person.Zipcode, &person.Phone)
 
 	if err != nil {
 
@@ -119,10 +120,10 @@ func (pr *personRepository) Update(id int, person models.Person) (bool, error) {
 
 	result, err := pr.db.Exec(`
 		UPDATE phonebook.person
-		SET first_name=?, last_name=?, city=?, areacode=?, phone=?
+		SET first_name=?, last_name=?, city=?, zipcode=?, phone=?
 		WHERE id=?;
 		
-	`, person.Firstname, person.Lastname, person.City, person.AreaCode, person.Phone, id)
+	`, person.Firstname, person.Lastname, person.City, person.Zipcode, person.Phone, id)
 
 	if err != nil {
 		return false, err
@@ -134,7 +135,7 @@ func (pr *personRepository) Update(id int, person models.Person) (bool, error) {
 	}
 
 	if affectedRows <= 0 {
-		return false, nil
+		return false, errors.New("No records updated")
 	}
 
 	return true, nil

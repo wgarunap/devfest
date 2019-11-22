@@ -1,17 +1,17 @@
 package main
 
 import (
+	"github.com/gorilla/mux"
+	"github.com/wgarunap/devfest/session1/9.crud-persistent/pkg/handlers"
+	// "github.com/wgarunap/devfest/session1/9.crud-persistent/pkg/models"
+
 	"net/http"
 	"time"
-
-	"github.com/gorilla/mux"
-	"github.com/wgarunap/devfest/session2/9.crud-persistent/pkg/handlers"
-	"github.com/wgarunap/devfest/session2/9.crud-persistent/pkg/models"
 )
 
 func main() {
 
-	handlers.PersonMap = make(map[int64]models.Person, 0)
+	// handlers.PersonMap = make(map[int]models.Person, 0)
 
 	router := mux.NewRouter()
 
