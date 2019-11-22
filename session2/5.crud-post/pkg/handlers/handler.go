@@ -3,26 +3,16 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/pickme-go/log"
 	"io/ioutil"
 	"net/http"
 	"sync/atomic"
+
+	"github.com/pickme-go/log"
+	"github.com/wgarunap/devfest/session2/5.crud-post/pkg/models"
 )
 
 var counter int64
-var PersonMap map[int64]Person
-
-type Person struct {
-	ID          int64    `json:"id,omitempty"`
-	Firstname   string `json:"firstname,omitempty"`
-	Lastname    string `json:"lastname,omitempty"`
-	Contactinfo `json:"contactinfo,omitempty"`
-}
-type Contactinfo struct {
-	City    string `json:"city,omitempty"`
-	Zipcode string `json:"zipcode,omitempty"`
-	Phone   string `json:"phone,omitempty"`
-}
+var PersonMap map[int64]models.Person
 
 type PostResponse struct {
 	ID int64 `json:"id,omitempty"`
@@ -40,7 +30,7 @@ func (HandlerPost) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var p Person
+	var p models.Person
 
 	err = json.Unmarshal(data, &p)
 	if err != nil {
