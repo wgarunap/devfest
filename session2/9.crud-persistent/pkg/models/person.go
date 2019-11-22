@@ -11,11 +11,11 @@ type Person struct {
 
 type ContactInfo struct {
 	City     string `json:"city,omitempty"`
-	AreaCode int    `json:"areacode,omitempty"`
-	Phone    int    `json:"phone,omitempty"`
+	AreaCode string `json:"areacode,omitempty"`
+	Phone    string `json:"phone,omitempty"`
 }
 
-// GetDialNumber retrns the dialing number
-func (p *Person) GetDialNumber() string {
-	return fmt.Sprintf("%d%d", p.AreaCode, p.Phone)
+// GetFullNumber retrns the dialing number
+func (p *Person) GetFullNumber() string {
+	return fmt.Sprintf("%s-%s", p.AreaCode, p.Phone)
 }

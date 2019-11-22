@@ -21,6 +21,7 @@ type PostResponse struct {
 }
 
 type GetResponse struct {
+	ID int `json:"ID,omitempty"`
 	Firstname          string `json:"firstname,omitempty"`
 	Lastname           string `json:"lastname,omitempty"`
 	models.ContactInfo `json:"contactinfo,omitempty"`
@@ -116,6 +117,7 @@ func (HandlerGet) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	res := GetResponse{}
+	res.ID = int(person.ID)
 	res.Phone = person.Phone
 	res.City = person.City
 	res.Firstname = person.Firstname
