@@ -1,20 +1,17 @@
 package main
 
 import (
-	"github.com/gorilla/mux"
-	"github.com/pickme-go/log"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/wgarunap/devfest/session1/10.crud-with-metrics/metrics"
-	"github.com/wgarunap/devfest/session1/10.crud-with-metrics/pkg/handlers"
 	"net/http"
 	"time"
+
+	"github.com/gorilla/mux"
+	"github.com/wgarunap/devfest/session2/9.crud-persistent/pkg/handlers"
+	"github.com/wgarunap/devfest/session2/9.crud-persistent/pkg/models"
 )
 
 func main() {
 
-	handlers.PersonMap = make(map[int64]handlers.Person, 0)
-
-	metricsCounter := metrics.InitServiceLatencyCounter(`dev_fest`, `phone_book_crud`)
+	handlers.PersonMap = make(map[int64]models.Person, 0)
 
 	router := mux.NewRouter()
 
@@ -25,34 +22,31 @@ func main() {
 		WriteTimeout: 1 * time.Second,
 	}
 
-	router.Handle("/person", handlers.HandlerPost{MetricsCounter:metricsCounter}).
+	router.Handle("/person", handlers.HandlerPost{}).
 		Methods(http.MethodPost).
 		Name("create-person-info").
 		Headers("content-type", "application/json")
 
-	router.Handle("/person/{id}", handlers.HandlerGet{MetricsCounter:metricsCounter}).
+	router.Handle("/person/{id}", handlers.HandlerGet{}).
 		Methods(http.MethodGet).
 		Name("get-person-info").
 		Headers("content-type", "application/json")
 
-	router.Handle("/person", handlers.HandlerGetAll{MetricsCounter:metricsCounter}).
+	router.Handle("/person", handlers.HandlerGetAll{}).
 		Methods(http.MethodGet).
 		Name("get-person-info").
 		Headers("content-type", "application/json")
 
-	router.Handle("/person/{id}", handlers.HandlerPut{MetricsCounter:metricsCounter}).
+	router.Handle("/person/{id}", handlers.HandlerPut{}).
 		Methods(http.MethodPut).
 		Name("update-person-info").
 		Headers("content-type", "application/json")
 
-	router.Handle("/person/{id}", handlers.HandlerDelete{MetricsCounter:metricsCounter}).
+	router.Handle("/person/{id}", handlers.HandlerDelete{}).
 		Methods(http.MethodDelete).
 		Name("delete-person-info").
 		Headers("content-type", "application/json")
 
-	router.Handle(`/metrics`, promhttp.Handler()).Methods(http.MethodGet)
-
-	log.Info(`http server is starting...`)
 	err := server.ListenAndServe()
 	if err != nil {
 		panic(err)
