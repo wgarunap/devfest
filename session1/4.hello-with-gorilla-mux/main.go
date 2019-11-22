@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gorilla/mux"
+	"io/ioutil"
 	"net/http"
 	"time"
 )
@@ -20,14 +21,12 @@ func main() {
 
 	router.Handle("/hello", handler{}).
 		Methods(http.MethodGet).
-		Name("get-hello").
-		Headers("content-type", "application/json")
+		Name("get-hello")
 
 	router.Handle("/hello", handler{}).
 		Methods(http.MethodPost).
-		Name("post-hello")
-
-	//router.Handle("/hello2", handler{})
+		Name("post-hello").
+		Headers("content-type", "application/json")
 
 	err := server.ListenAndServe()
 	if err != nil {
@@ -38,7 +37,7 @@ func main() {
 type handler struct {
 }
 
-func (handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("connection received")
-	_, _ = fmt.Fprintf(w, "%s received for hello endpoint with handler \n", r.Method)
+func (handler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
+	msg, _ := ioutil.ReadAll(request.Body)
+	fmt.Fprintf(writer, "endpoint: %v method: %v , message received : %v \n", request.URL.String(), request.Method, string(msg))
 }

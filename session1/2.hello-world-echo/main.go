@@ -7,10 +7,9 @@ import (
 )
 
 func main() {
-
 	http.HandleFunc("/hello", func(writer http.ResponseWriter, request *http.Request) {
 		msg, _ := ioutil.ReadAll(request.Body)
-		_, _ = fmt.Fprintf(writer, "Hello, %s \n", string(msg))
+		fmt.Fprintf(writer, "Hello, %s \n", string(msg))
 	})
 
 	fmt.Println("server is starting...")
