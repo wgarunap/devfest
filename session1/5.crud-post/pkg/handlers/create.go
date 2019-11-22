@@ -6,12 +6,14 @@ import (
 	"github.com/pickme-go/log"
 	"io/ioutil"
 	"net/http"
+	"sync/atomic"
 )
 
-var PersonMap map[int]Person
+var counter int64
+var PersonMap map[int64]Person
 
 type Person struct {
-	ID          int    `json:"id,omitempty"`
+	ID          int64    `json:"id,omitempty"`
 	Firstname   string `json:"firstname,omitempty"`
 	Lastname    string `json:"lastname,omitempty"`
 	Contactinfo `json:"contactinfo,omitempty"`
@@ -23,7 +25,7 @@ type Contactinfo struct {
 }
 
 type PostResponse struct {
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 }
 
 type HandlerPost struct {
@@ -48,7 +50,7 @@ func (HandlerPost) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	p.ID = len(PersonMap) + 1
+	p.ID = atomic.AddInt64(&counter, 1)
 
 	PersonMap[p.ID] = p
 

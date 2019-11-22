@@ -4,15 +4,15 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/pickme-go/log"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/wgarunap/devfest/session1/9.crud-with-metrics/metrics"
-	"github.com/wgarunap/devfest/session1/9.crud-with-metrics/pkg/handlers"
+	"github.com/wgarunap/devfest/session1/10.crud-with-metrics/metrics"
+	"github.com/wgarunap/devfest/session1/10.crud-with-metrics/pkg/handlers"
 	"net/http"
 	"time"
 )
 
 func main() {
 
-	handlers.PersonMap = make(map[int]handlers.Person, 0)
+	handlers.PersonMap = make(map[int64]handlers.Person, 0)
 
 	metricsCounter := metrics.InitServiceLatencyCounter(`dev_fest`, `phone_book_crud`)
 

@@ -6,17 +6,19 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/pickme-go/log"
-	"github.com/wgarunap/devfest/session1/10.crud-with-pprof/metrics"
+	"github.com/wgarunap/devfest/session1/11.crud-with-pprof/metrics"
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"sync/atomic"
 	"time"
 )
 
-var PersonMap map[int]Person
+var counter int64
+var PersonMap map[int64]Person
 
 type Person struct {
-	ID          int    `json:"id,omitempty"`
+	ID          int64    `json:"id,omitempty"`
 	Firstname   string `json:"firstname,omitempty"`
 	Lastname    string `json:"lastname,omitempty"`
 	Contactinfo `json:"contactinfo,omitempty"`
@@ -28,7 +30,7 @@ type Contactinfo struct {
 }
 
 type PostResponse struct {
-	ID int `json:"id,omitempty"`
+	ID int64 `json:"id,omitempty"`
 }
 
 type GetResponse struct {
@@ -38,7 +40,7 @@ type GetResponse struct {
 }
 
 type GetAllResponse struct {
-	Data map[int]Person `json:"data"`
+	Data map[int64]Person `json:"data"`
 }
 
 type HandlerPost struct {
@@ -83,7 +85,7 @@ func (hp HandlerPost) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	p.ID = len(PersonMap) + 1
+	p.ID = atomic.AddInt64(&counter, 1)
 
 	PersonMap[p.ID] = p
 
@@ -128,7 +130,7 @@ func (hg HandlerGet) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	person, ok := PersonMap[bid]
+	person, ok := PersonMap[int64(bid)]
 	if !ok {
 		log.Info("no records for given  id")
 		w.WriteHeader(http.StatusOK)
@@ -212,7 +214,7 @@ func (hpu HandlerPut) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, ok = PersonMap[bid]
+	_, ok = PersonMap[int64(bid)]
 	if !ok {
 		log.Info("no records for given  id to update")
 		w.WriteHeader(http.StatusOK)
@@ -220,7 +222,7 @@ func (hpu HandlerPut) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	PersonMap[bid] = p
+	PersonMap[int64(bid)] = p
 	w.WriteHeader(http.StatusOK)
 	_, _ = fmt.Fprintf(w, "success updating info for id: %v", bid)
 
@@ -259,7 +261,7 @@ func (hd HandlerDelete) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, ok = PersonMap[bid]
+	_, ok = PersonMap[int64(bid)]
 	if !ok {
 		log.Info("nothing to delete")
 		w.WriteHeader(http.StatusOK)
@@ -267,7 +269,7 @@ func (hd HandlerDelete) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	delete(PersonMap, bid)
+	delete(PersonMap, int64(bid))
 	w.WriteHeader(http.StatusOK)
 	_, _ = fmt.Fprintf(w, "success deleting info for id: %v", bid)
 
