@@ -4,15 +4,17 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/wgarunap/devfest/session3/10.crud-with-metrics/metrics"
+	"github.com/wgarunap/devfest/session3/10.crud-with-metrics/pkg/adapters"
+	"github.com/wgarunap/devfest/session3/10.crud-with-metrics/pkg/models"
+	"github.com/wgarunap/devfest/session3/10.crud-with-metrics/pkg/repositories"
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/pickme-go/log"
-	"github.com/wgarunap/devfest/session2/9.crud-persistent/pkg/adapters"
-	"github.com/wgarunap/devfest/session2/9.crud-persistent/pkg/models"
-	"github.com/wgarunap/devfest/session2/9.crud-persistent/pkg/repositories"
 )
 
 var counter int64
@@ -34,23 +36,31 @@ type GetAllResponse struct {
 }
 
 type HandlerPost struct {
+	MetricsCounter metrics.Metricer
 }
 
 type HandlerGet struct {
+	MetricsCounter metrics.Metricer
 }
 
 type HandlerGetAll struct {
+	MetricsCounter metrics.Metricer
 }
 
 type HandlerPut struct {
+	MetricsCounter metrics.Metricer
 }
 
 type HandlerDelete struct {
+	MetricsCounter metrics.Metricer
 }
 
 var personRepository = repositories.NewPersonRepository(adapters.NewDbConnection())
 
-func (HandlerPost) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (hp HandlerPost) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+	defer hp.MetricsCounter.CountLatency(time.Now(), []string{`post`})
+
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Error(err)
@@ -93,7 +103,10 @@ func (HandlerPost) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Write(responseData)
 }
 
-func (HandlerGet) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (hg HandlerGet) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+	defer hg.MetricsCounter.CountLatency(time.Now(), []string{`get`})
+
 	var err error
 	var bid int
 
@@ -154,9 +167,9 @@ func (HandlerGet) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (HandlerGetAll) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (hga HandlerGetAll) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
-	// res := GetAllResponse{}
+	defer hga.MetricsCounter.CountLatency(time.Now(), []string{`get_all`})
 
 	respData := []GetResponse{}
 
@@ -192,7 +205,10 @@ func (HandlerGetAll) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (HandlerPut) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (hp HandlerPut) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+	defer hp.MetricsCounter.CountLatency(time.Now(), []string{`put`})
+
 	var err error
 	var bid int
 
@@ -261,7 +277,10 @@ func (HandlerPut) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (HandlerDelete) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (hd HandlerDelete) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+	defer hd.MetricsCounter.CountLatency(time.Now(), []string{`delete`})
+
 	var err error
 	var bid int
 

@@ -2,8 +2,7 @@ package repositories
 
 import (
 	"database/sql"
-
-	"github.com/wgarunap/devfest/session2/9.crud-persistent/pkg/models"
+	"github.com/wgarunap/devfest/session3/10.crud-with-metrics/pkg/models"
 )
 
 type personRepository struct {
