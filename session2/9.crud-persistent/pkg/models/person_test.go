@@ -2,7 +2,7 @@ package models
 
 import "testing"
 
-func TestGetDialNumber(t *testing.T) {
+func TestGetFullNumber(t *testing.T) {
 
 	p := Person{}
 	p.ID = 1
@@ -15,11 +15,11 @@ func TestGetDialNumber(t *testing.T) {
 	result := p.GetFullNumber()
 
 	if result != "045-8475847" {
-		t.Error("Test Failed GetDialNumber()")
+		t.Error("Test Failed GetFullNumber()")
 	}
 }
 
-func TestGetDialNumberTableDriven(t *testing.T) {
+func TestGetFullNumberTableDriven(t *testing.T) {
 	type TableEntry struct {
 		Input  Person
 		Output string
@@ -50,12 +50,12 @@ func TestGetDialNumberTableDriven(t *testing.T) {
 
 	for _, te := range testData {
 		if te.Input.GetFullNumber() != te.Output {
-			t.Error("Error GetDialNumber()")
+			t.Error("Error GetFullNumber()")
 		}
 	}
 }
 
-func BenchmarkGetDialNumber(b *testing.B) {
+func BenchmarkGetFullNumber(b *testing.B) {
 
 	p := Person{}
 	p.ID = 1
